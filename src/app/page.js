@@ -23,7 +23,7 @@ export default function Home() {
           <div className = "flex gap-[10px]">
             <div className="px-[20px] py-[10px] bg-black text-white rounded-[8px]">
               <SignedOut>
-                <SignInButton />
+                <a href = "/sign-in">Log In</a>
               </SignedOut>
               <SignedIn>
                 <UserButton />
@@ -31,7 +31,7 @@ export default function Home() {
             </div>
             <div className="px-[20px] py-[10px] bg-white text-black rounded-[8px] border border-black">
               <SignedOut>
-                <SignUpButton />
+              <a href = "/sign-up">Sign Up</a>
               </SignedOut>
               <SignedIn>
                 <UserButton />
