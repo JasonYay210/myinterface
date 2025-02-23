@@ -2,16 +2,16 @@
 import React, { useState, useEffect } from "react";
 
 const Hero = () => {
-  const [url, setUrl] = useState("");
+  const [inputText, setInputText] = useState(""); // Renamed to inputText for clarity
   const [result, setResult] = useState("");
   const [animatedResult, setAnimatedResult] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // Reset the result and animatedResult when URL changes
+  // Reset the result and animatedResult when inputText changes
   useEffect(() => {
     setResult(""); // Clear previous result
     setAnimatedResult(""); // Clear animated result
-  }, [url]); // Dependency on url, resets whenever it changes
+  }, [inputText]); // Dependency on inputText, resets whenever it changes
 
   // To clear the animation interval whenever the component re-renders or resets
   const clearAnimation = () => {
@@ -24,21 +24,23 @@ const Hero = () => {
       setResult(""); // Clear previous result before fetching new one
       setAnimatedResult(""); // Clear previous animation
 
+      // Send the input text to the API endpoint for processing
       const response = await fetch("/api/MockupCreation", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ url }),
+        body: JSON.stringify({ sentences: inputText.split(". ") }), // Split input into sentences
       });
+
       const data = await response.json();
-      setResult(data.result);
+      setResult(data.result); // Set result from API response
 
       // Animate text after result is set
       animateText(data.result);
     } catch (error) {
       console.error("Scraping error:", error);
-      setResult("Error occurred while scraping");
+      setResult("Error occurred while processing the input.");
     } finally {
       setLoading(false);
     }
@@ -50,7 +52,7 @@ const Hero = () => {
 
     let index = -1;
     const intervalId = setInterval(() => {
-      if (index < text.length-1) {
+      if (index < text.length - 1) {
         setAnimatedResult((prev) => prev + text[index]);
         index++;
       } else {
@@ -77,17 +79,17 @@ const Hero = () => {
           {result ? (
             <pre className="whitespace-pre-wrap">{animatedResult}</pre> // Show animated result
           ) : (
-            <p className="text-gray-400 animate-dots">Awaiting link</p> // Placeholder with animation
+            <p className="text-gray-400 animate-dots">Awaiting input</p> // Placeholder with animation
           )}
         </div>
 
-        {/* URL Input and Button */}
+        {/* Input Field for User Input */}
         <div className="flex items-center border border-black rounded-lg overflow-hidden">
           <input
             type="text"
-            value={url}
-            onChange={(e) => setUrl(e.target.value)}
-            placeholder="Enter URL to scrape"
+            value={inputText}
+            onChange={(e) => setInputText(e.target.value)}
+            placeholder="Enter text to create mockup"
             className="flex-grow p-3 text-black"
           />
           <button
