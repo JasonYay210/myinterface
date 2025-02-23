@@ -68,7 +68,7 @@ function Header() {
         <a href="#">About</a>
         <a href="#">Contact</a>
           <SignedOut>
-            <SignInButton className="px-[20px] py-[10px] bg-black text-white rounded-[8px]"/>
+            <a className="px-[20px] py-[10px] bg-black text-white rounded-[8px]" href = "/sign-in">Log In</a>
           </SignedOut>
           <SignedIn>
             <UserButton />
