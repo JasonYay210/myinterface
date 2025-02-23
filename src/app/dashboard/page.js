@@ -43,7 +43,7 @@ export default function DashboardPage() {
   
       if (userDoc.exists()) {
         const userData = userDoc.data();
-        updatedButtons = { ...(userData.buttons || {}), [newButtonName]: "header" }; // Add button as key with empty value
+        updatedButtons = { ...(userData.buttons || {}), [newButtonName]: "[]" }; // Add button as key with empty value
       } else {
         updatedButtons = { [newButtonName]: "" }; // Create new object if user doesn't exist
       }
@@ -97,14 +97,14 @@ export default function DashboardPage() {
 
   return (
     <div>
-      <div className="flex">
-        <div className="w-[30%] border-r border-[1px] p-[25px] gap-[15px]">
+      <div className="flex h-[100vh]">
+        <div className="w-[30%] flex  flex-col border-r border-black p-[25px] gap-[15px]">
           <h1 className="font-space-mono font-normal text-[21px] leading-[31.1px] tracking-normal">Browse</h1>
           {buttons.map((button, index) => (
             <div key={index} className="flex items-center justify-between">
                 <div 
                 onClick={() => handleButtonClick(button)}
-                className="flex flex-col bg-gray-300 text-black px-4 py-2 rounded cursor-pointer"
+                className="flex flex-col text-black cursor-pointer"
                 >
                 {button}
                 </div>

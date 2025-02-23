@@ -77,7 +77,7 @@ const Standardize = () => {
   };
 
   return (
-    <div className="w-full border border-black rounded-[12px] max-w-[600px] mx-auto">
+    <div className="w-full border h-fit  border-black rounded-[12px] max-w-[600px] mx-auto">
       {/* Header */}
       <div className="flex justify-between p-4 border-b border-black">
         <p className="text-lg font-semibold">Standardize UI/UX</p>
