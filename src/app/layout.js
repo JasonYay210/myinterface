@@ -54,14 +54,12 @@ function Header() {
       <div className="flex gap-[25px] items-center">
         <a href="#">About</a>
         <a href="#">Contact</a>
-        <div className="px-[20px] py-[10px] bg-black text-white rounded-[8px]">
           <SignedOut>
-            <SignInButton />
+            <SignInButton className="px-[20px] py-[10px] bg-black text-white rounded-[8px]"/>
           </SignedOut>
           <SignedIn>
             <UserButton />
           </SignedIn>
-        </div>
       </div>
     </div>
   );
