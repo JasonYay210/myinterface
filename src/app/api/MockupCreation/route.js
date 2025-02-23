@@ -19,7 +19,7 @@ export async function POST(request) {
     }
 
     // Construct the system message dynamically based on user input
-    const systemMessage = `You are an AI that generates only the code for the requested component. The user has asked for a ${userRequest}. Please generate only the ${userRequest} code. Do not include any additional code, explanations, or extra elements. Just the requested ${userRequest} code. It should still follow standard coding protocols`;
+    const systemMessage = `REPLY with Generate Componenet (dont say sure, dont say anything just generate) Code ONLY. Create the entire div element. HTML and CSS ONLY. CSS font fam is arial. Create all styling with INDUSTRY STANDARD(standard padding,gaps,sizing)`;
 
     // Use Groq AI to generate the requested code
     const completion = await groq.chat.completions.create({

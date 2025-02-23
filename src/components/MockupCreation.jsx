@@ -1,22 +1,18 @@
-"use client";
+'use client';
+
 import React, { useState, useEffect } from "react";
 
-const Hero = () => {
+const Hero = ({ onGeneratedElement }) => { // Destructure onGeneratedElement from props
   const [inputText, setInputText] = useState(""); // Renamed to inputText for clarity
-  const [result, setResult] = useState("");
-  const [animatedResult, setAnimatedResult] = useState("");
+  const [result, setResult] = useState(""); // To store current result
+  const [animatedResult, setAnimatedResult] = useState(""); // To store animated result
   const [loading, setLoading] = useState(false);
 
   // Reset the result and animatedResult when inputText changes
   useEffect(() => {
     setResult(""); // Clear previous result
     setAnimatedResult(""); // Clear animated result
-  }, [inputText]); // Dependency on inputText, resets whenever it changes
-
-  // To clear the animation interval whenever the component re-renders or resets
-  const clearAnimation = () => {
-    setAnimatedResult(""); // Clear the previous animation
-  };
+  }, [inputText]);
 
   const handleScrape = async () => {
     try {
@@ -38,6 +34,11 @@ const Hero = () => {
 
       // Animate text after result is set
       animateText(data.result);
+
+      // Call onGeneratedElement prop to send the new result to the parent
+      onGeneratedElement(data.result); // This is the key change!
+
+      console.log("data result: " + data.result);
     } catch (error) {
       console.error("Scraping error:", error);
       setResult("Error occurred while processing the input.");
@@ -74,7 +75,7 @@ const Hero = () => {
 
       {/* Main Content */}
       <div className="flex flex-col p-4 gap-4">
-        {/* Scraped Data Container (Always visible, with no content until loaded) */}
+        {/* Scraped Data Container */}
         <div className="bg-black text-white rounded-lg p-4 h-[200px] overflow-y-auto overflow-x-auto hide-scrollbar">
           {result ? (
             <pre className="whitespace-pre-wrap">{animatedResult}</pre> // Show animated result

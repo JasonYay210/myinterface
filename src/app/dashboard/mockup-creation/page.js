@@ -1,16 +1,26 @@
-'use client'
+'use client';
 
-import React, { useState } from 'react';
-import MockupCreation from "@/components/MockupCreation";
-import { useRouter, useSearchParams } from 'next/navigation'; // Import useSearchParams
+import React, { useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation'; 
+import MockupCreation from "@/components/MockupCreation"; // Assuming MockupCreation is responsible for generating mockup code
+import Hero from "@/components/MockupCreation"; // Assuming Hero is the component generating elements
+import EmptyEle from "@/components/EmptyEle";
 
 export default function MockupCreationPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const buttonName = searchParams.get('name'); // Get the button name from URL
 
-  // State to manage the generated code (this would normally come from MockupCreation component)
-  const [generatedCode, setGeneratedCode] = useState(''); // Assuming MockupCreation sets this
+  // State to manage the generated code
+  const [generatedCode, setGeneratedCode] = useState(''); 
+
+  // State to hold generated EmptyEle components
+  const [generatedElements, setGeneratedElements] = useState([]); 
+
+  // Log the value of generatedCode whenever it changes
+  useEffect(() => {
+    console.log("Generated Code:", generatedCode); // Log the current value of generatedCode
+  }, [generatedCode]); // Runs every time generatedCode is updated
 
   // Function to render the generated code as a webpage
   const renderCodeAsWebpage = () => {
@@ -22,6 +32,11 @@ export default function MockupCreationPage() {
         style={{ border: 'none' }}
       />
     );
+  };
+
+  // Handle adding new elements (e.g., the result from MockupCreation) to generatedElements
+  const handleGeneratedElement = (content) => {
+    setGeneratedElements((prev) => [...prev, content]);
   };
 
   return (
@@ -44,16 +59,15 @@ export default function MockupCreationPage() {
         <h1 className="mt-4">Mockup Creation</h1>
         <p>Welcome to the mockup creation page!</p>
 
-        {/* Mockup Creation Component */}
-        <MockupCreation setGeneratedCode={setGeneratedCode} /> {/* Pass down setGeneratedCode */}
-      </div>
+        {/* Pass handleGeneratedElement to Hero as a prop */}
+        <Hero onGeneratedElement={handleGeneratedElement} />
 
-      {/* Right Side: Display Generated Code as Webpage */}
-      <div className="ml-8 w-1/3 p-4 bg-gray-100 rounded-md">
-        <h2 className="text-xl font-bold">Generated Code Preview</h2>
-
-        {/* Render the generated code as a webpage using iframe */}
-        {generatedCode && renderCodeAsWebpage()}
+        {/* Display generated EmptyEle components */}
+        <div>
+          {generatedElements.map((content, index) => (
+            <EmptyEle key={index} content={content} />
+          ))}
+        </div>
       </div>
     </div>
   );
