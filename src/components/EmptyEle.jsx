@@ -1,6 +1,6 @@
 import React from "react";
 
-const EmptyEle = ({ content }) => {
+const EmptyEle = ({ content, onDelete }) => {
   // Parsing the content into HTML and CSS (if it's in a specific format)
   const [htmlContent, setHtmlContent] = React.useState("");
   const [cssContent, setCssContent] = React.useState("");
@@ -18,10 +18,13 @@ const EmptyEle = ({ content }) => {
   }, [content]);
 
   return (
-    <div>
+    <div 
+      onClick={onDelete}  // Clicking the element will trigger the onDelete function
+      style={{ cursor: "pointer" }}  // Optional: make the cursor pointer to indicate it's clickable
+    >
       {/* Apply the CSS content dynamically if it exists */}
       {cssContent && <style>{cssContent}</style>}
-      
+
       {/* Render the HTML content */}
       <div dangerouslySetInnerHTML={{ __html: htmlContent }} />
     </div>

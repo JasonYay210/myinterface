@@ -1,25 +1,39 @@
 'use client';
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { db } from '../../firebase';
+import { useUser } from '@clerk/clerk-react'; // Import Clerk's useUser hook
+import { useSearchParams } from 'next/navigation'; // Import useSearchParams
 
-const Hero = ({ onGeneratedElement }) => { // Destructure onGeneratedElement from props
-  const [inputText, setInputText] = useState(""); // Renamed to inputText for clarity
-  const [result, setResult] = useState(""); // To store current result
-  const [animatedResult, setAnimatedResult] = useState(""); // To store animated result
+const Hero = ({ onGeneratedElement, generatedElements }) => {
+  const [inputText, setInputText] = useState(""); 
+  const [result, setResult] = useState(""); 
+  const [animatedResult, setAnimatedResult] = useState(""); 
   const [loading, setLoading] = useState(false);
+  const { user } = useUser();
 
-  // Reset the result and animatedResult when inputText changes
+  const searchParams = useSearchParams();
+
+  const inputRef = useRef(null);
+
   useEffect(() => {
-    setResult(""); // Clear previous result
-    setAnimatedResult(""); // Clear animated result
+    setResult("");
+    setAnimatedResult(""); 
   }, [inputText]);
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, []);
 
   const handleScrape = async () => {
     try {
       setLoading(true);
       setResult(""); // Clear previous result before fetching new one
       setAnimatedResult(""); // Clear previous animation
-
+  
       // Send the input text to the API endpoint for processing
       const response = await fetch("/api/MockupCreation", {
         method: "POST",
@@ -28,28 +42,55 @@ const Hero = ({ onGeneratedElement }) => { // Destructure onGeneratedElement fro
         },
         body: JSON.stringify({ sentences: inputText.split(". ") }), // Split input into sentences
       });
-
+  
       const data = await response.json();
       setResult(data.result); // Set result from API response
-
+  
       // Animate text after result is set
       animateText(data.result);
-
+  
       // Call onGeneratedElement prop to send the new result to the parent
-      onGeneratedElement(data.result); // This is the key change!
-
-      console.log("data result: " + data.result);
+      onGeneratedElement(data.result);
+  
+      if (user) {
+        const buttonName = searchParams.get('name'); // Get the button name from URL
+        if (!buttonName) return; // Ensure there's a valid button name
+  
+        // Reference to the user's document in Firestore
+        const userRef = doc(db, 'users', user.id);
+        const userDoc = await getDoc(userRef);
+  
+        let updatedButtons = {};
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          updatedButtons = userData.buttons || {}; // Keep existing buttons
+  
+          // If buttonName exists, append the new result instead of replacing
+          if (updatedButtons[buttonName]) {
+            updatedButtons[buttonName] += `, ${data.result}`;
+          } else {
+            updatedButtons[buttonName] = data.result;
+          }
+        } else {
+          // If user doesn't exist, create a new entry
+          updatedButtons = { [buttonName]: data.result };
+        }
+  
+        // Update Firestore document without overwriting existing data
+        await setDoc(userRef, { buttons: updatedButtons }, { merge: true });
+  
+        console.log("Button updated successfully:", updatedButtons);
+      }
     } catch (error) {
       console.error("Scraping error:", error);
       setResult("Error occurred while processing the input.");
     } finally {
       setLoading(false);
     }
-  };
+  };  
 
-  // Animate the result letter by letter
   const animateText = (text) => {
-    if (!text) return; // Return early if text is invalid (empty or undefined)
+    if (!text) return;
 
     let index = -1;
     const intervalId = setInterval(() => {
@@ -57,14 +98,27 @@ const Hero = ({ onGeneratedElement }) => { // Destructure onGeneratedElement fro
         setAnimatedResult((prev) => prev + text[index]);
         index++;
       } else {
-        clearInterval(intervalId); // Stop when all text is shown
+        clearInterval(intervalId);
       }
-    }, 10); // Adjust delay (in ms) to control speed of letter-by-letter animation
+    }, 10);
+  };
+
+  const handleRegenerate = () => {
+    // Remove the last element and regenerate a new one
+    setResult(""); 
+    setAnimatedResult(""); 
+    handleScrape(); // Calls the same scrape function to regenerate
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault(); 
+      handleScrape();
+    }
   };
 
   return (
-    <div className="w-full border border-black rounded-[12px] max-w-[600px] mx-auto">
-      {/* Header */}
+    <div className="bg-white absolute top-1 left-1/2 -translate-x-1/2 w-full border border-black rounded-[12px] max-w-[600px] mx-auto opacity-95">
       <div className="flex justify-between p-4 border-b border-black">
         <p className="text-lg font-semibold">Mockup Creator</p>
         <div className="flex gap-2">
@@ -73,25 +127,24 @@ const Hero = ({ onGeneratedElement }) => { // Destructure onGeneratedElement fro
         </div>
       </div>
 
-      {/* Main Content */}
       <div className="flex flex-col p-4 gap-4">
-        {/* Scraped Data Container */}
-        <div className="bg-black text-white rounded-lg p-4 h-[200px] overflow-y-auto overflow-x-auto hide-scrollbar">
+        <div className="bg-black text-white rounded-lg p-4 h-[100px] overflow-y-auto overflow-x-auto hide-scrollbar">
           {result ? (
-            <pre className="whitespace-pre-wrap">{animatedResult}</pre> // Show animated result
+            <pre className="whitespace-pre-wrap">{animatedResult}</pre>
           ) : (
-            <p className="text-gray-400 animate-dots">Awaiting input</p> // Placeholder with animation
+            <p className="text-gray-400 animate-dots">Awaiting input</p>
           )}
         </div>
 
-        {/* Input Field for User Input */}
         <div className="flex items-center border border-black rounded-lg overflow-hidden">
           <input
+            ref={inputRef}
             type="text"
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
             placeholder="Enter text to create mockup"
             className="flex-grow p-3 text-black"
+            onKeyDown={handleKeyDown}
           />
           <button
             onClick={handleScrape}
@@ -101,6 +154,15 @@ const Hero = ({ onGeneratedElement }) => { // Destructure onGeneratedElement fro
             {loading ? "..." : "+"}
           </button>
         </div>
+
+        {/* Regenerate Button */}
+        <button
+          onClick={handleRegenerate}
+          disabled={loading}
+          className="mt-4 p-2 bg-blue-500 text-white rounded-md"
+        >
+          Regenerate
+        </button>
       </div>
     </div>
   );
