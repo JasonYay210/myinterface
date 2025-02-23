@@ -42,6 +42,12 @@ function Header() {
     }
   }, [isSignedIn, router]);
 
+  useEffect(() => {
+    if (!isSignedIn) {
+      router.push('/'); // Redirect to the layout page
+    }
+  }, [isSignedIn, router]);
+
   return (
     <div className="flex justify-between px-[50px] py-[25px] border-b border-black items-center">
       <p>MyInterface</p>
