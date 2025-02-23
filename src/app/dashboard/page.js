@@ -45,7 +45,8 @@ export default function DashboardPage() {
             +
           </div>
         </div>
-        <div className="w-[70%]">
+        <div className="p-[25px] gap-[25px] flex w-[70%]">
+          <Hero />
           <Hero />
         </div>
       </div>
