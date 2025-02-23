@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react';
+import MockupCreation from "@/components/MockupCreation";
 import { useRouter, useSearchParams } from 'next/navigation'; // Import useSearchParams
 
 export default function MockupCreationPage() {
@@ -25,6 +26,11 @@ export default function MockupCreationPage() {
 
       <h1 className="mt-4">Mockup Creation</h1>
       <p>Welcome to the mockup creation page!</p>
+
+
+      <MockupCreation />
+
     </div>
+    
   );
 }

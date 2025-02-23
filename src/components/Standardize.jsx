@@ -24,7 +24,7 @@ const Standardize = () => {
       setResult(""); // Clear previous result before fetching new one
       setAnimatedResult(""); // Clear previous animation
 
-      const response = await fetch("/api/scrape", {
+      const response = await fetch("/api/StandardizeScrape", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

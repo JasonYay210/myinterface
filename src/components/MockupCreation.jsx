@@ -24,7 +24,7 @@ const Hero = () => {
       setResult(""); // Clear previous result before fetching new one
       setAnimatedResult(""); // Clear previous animation
 
-      const response = await fetch("/api/SEOscrape", {
+      const response = await fetch("/api/MockupCreation", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -63,7 +63,7 @@ const Hero = () => {
     <div className="w-full border border-black rounded-[12px] max-w-[600px] mx-auto">
       {/* Header */}
       <div className="flex justify-between p-4 border-b border-black">
-        <p className="text-lg font-semibold">SEO Optimizer</p>
+        <p className="text-lg font-semibold">Mockup Creator</p>
         <div className="flex gap-2">
           <p>o</p>
           <p>o</p>

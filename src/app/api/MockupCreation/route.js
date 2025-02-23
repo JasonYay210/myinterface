@@ -99,12 +99,15 @@ export async function POST(request) {
       messages: [
         {
           role: 'system',
-          content: 'You are an AI assistant that analyzes web content based on industry standards for HTML structure, CSS practices, and accessibility.'
+          content: 'You are an AI assistant that analyzes web content based on industry standards for SEO optimization.'
         },
         {
           role: 'user',
           content: `
-            In the first line, rate the website on a scale of 1-100. just say rating: x/100. Second Line, generate Meta tags for the page basedAnalyze the following content based on industry standards for web development, including HTML structure, CSS practices, accessibility, and SEO:. Suggest standardized text and image sizes based on industry data and UX research. Make sure your output is between 5 to 10 words per category."
+            In the first line, rate the website on a scale of 1-100 based off how standardized and effective is SEO is. Output it saying "SEO Rating: " 
+            Second Line, generate Meta tags for the page. Analyze the following content based on industry standards for SEO:. 
+            Suggest standardized SEO practices and how to implement them into the existing page. 
+            Make sure your output is atleast 50 words, between 5 to 10 words per category. Only provide information that is necessary and make it personal."
 
             Title: ${scrapedData.title}
             Meta Description: ${scrapedData.metaDescription}
