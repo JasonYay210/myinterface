@@ -3,25 +3,22 @@
 import Hero from "@/components/Hero";
 import Standardize from "@/components/Standardize";
 import React, { useState } from 'react';
-import { useRouter } from 'next/navigation'; // Import useRouter
+import { useRouter } from 'next/navigation';
 
 export default function DashboardPage() {
-  // State to keep track of the buttons
   const [buttons, setButtons] = useState([]);
-  const router = useRouter(); // Initialize useRouter
+  const router = useRouter();
 
-  // Function to add a new button
   const addButton = () => {
-    const newButtonName = prompt("Enter the name for the new button:");  // Ask the user for a name
-    if (newButtonName) {  // Only add if the user entered a name
-      setButtons([...buttons, newButtonName]); // Adds the new button name to the array
+    const newButtonName = prompt("Enter the name for the new button:");
+    if (newButtonName) {
+      setButtons([...buttons, newButtonName]);
     }
   };
 
-  // Function to handle the click of a new button
   const handleButtonClick = (buttonName) => {
-    // Redirect to the mockup-creation page (you can pass any dynamic part if necessary)
-    router.push('dashboard/mockup-creation');
+    // Redirect to the mockup page with buttonName as a query parameter
+    router.push(`/dashboard/mockup-creation?name=${encodeURIComponent(buttonName)}`);
   };
 
   return (
@@ -29,11 +26,10 @@ export default function DashboardPage() {
       <div className="flex">
         <div className="w-[30%] border-r border-[1px] p-[25px] gap-[15px]">
           <h1 className="font-space-mono font-normal text-[21px] leading-[31.1px] tracking-normal">Browse</h1>
-          {/* Render the dynamically generated clickable divs */}
           {buttons.map((button, index) => (
             <div 
               key={index} 
-              onClick={() => handleButtonClick(button)}  // Add onClick to navigate
+              onClick={() => handleButtonClick(button)}
               className="flex flex-col bg-gray-300 text-black px-4 py-2 rounded cursor-pointer"
             >
               {button}
