@@ -2,6 +2,17 @@ import Image from "next/image";
 import Websitefooter from '@/components/footer';
 import Hero from "@/components/Hero";
 
+import {
+  ClerkProvider,
+  SignInButton,
+  SignUpButton,
+  SignedIn,
+  SignedOut,
+  UserButton,
+  useUser, // Add this hook
+} from '@clerk/nextjs';
+import Button from "@/components/button";
+
 export default function Home() {
   return (
     <div>
@@ -10,8 +21,22 @@ export default function Home() {
           <h1 className = "text-[27px] font-bold">BUILD SMARTER, OPTIMIZED WESBITES</h1>
           <p>An AI-driven tool ensures industry-standard UI/UX formatting and SEO, allowing you to focus on what truly matters — YOUR CONTENT.</p>
           <div className = "flex gap-[10px]">
-            <a className = "px-[20px] py-[10px] bg-black text-white rounded-[8px]" href = "#">Login</a>
-            <a className = "px-[20px] py-[10px] bg-white text-black rounded-[8px] border border-black" href = "#">Sign Up</a>
+            <div className="px-[20px] py-[10px] bg-black text-white rounded-[8px]">
+              <SignedOut>
+                <SignInButton />
+              </SignedOut>
+              <SignedIn>
+                <UserButton />
+              </SignedIn>
+            </div>
+            <div className="px-[20px] py-[10px] bg-white text-black rounded-[8px] border border-black">
+              <SignedOut>
+                <SignUpButton />
+              </SignedOut>
+              <SignedIn>
+                <UserButton />
+              </SignedIn>
+            </div>
           </div>
           <p className = "text-[12px]">By Logging in, you accept to our <u>terms & conditions</u> and <u>privacy policies</u></p>
         </div>
