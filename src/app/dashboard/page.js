@@ -21,7 +21,7 @@ export default function DashboardPage() {
   // Function to handle the click of a new button
   const handleButtonClick = (buttonName) => {
     // Redirect to the mockup-creation page (you can pass any dynamic part if necessary)
-    router.push('../mockup-creation');
+    router.push('dashboard/mockup-creation');
   };
 
   return (

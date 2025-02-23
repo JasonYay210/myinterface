@@ -10,6 +10,7 @@ import {
 } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation'; // Use `next/navigation` for App Router
 import { useEffect } from 'react'; // Add this hook
+import { usePathname } from 'next/navigation';
 import './globals.css';
 
 export default function RootLayout({ children }) {
@@ -32,21 +33,15 @@ export default function RootLayout({ children }) {
 }
 
 function Header() {
-  const { isSignedIn } = useUser(); // Check if the user is signed in
-  const router = useRouter(); // Use the router for navigation
-
-  // Redirect to /dashboard when the user signs in
-  useEffect(() => {
-    if (isSignedIn) {
-      router.push('/dashboard'); // Redirect to the dashboard page
-    }
-  }, [isSignedIn, router]);
+  const { isSignedIn } = useUser();
+  const router = useRouter();
+  const pathname = usePathname(); // Get the current route
 
   useEffect(() => {
-    if (!isSignedIn) {
-      router.push('/'); // Redirect to the layout page
+    if (isSignedIn && pathname === "/") {
+      router.push("/dashboard"); // Redirect to dashboard only from the home page
     }
-  }, [isSignedIn, router]);
+  }, [isSignedIn, pathname, router]);
 
   return (
     <div className="flex justify-between px-[50px] py-[25px] border-b border-black items-center">
