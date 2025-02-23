@@ -60,7 +60,6 @@ export default function Home() {
         </div>
         <img className = "w-[500px]" src = "SEO Optimizer.png"></img>
       </div>
-      <Hero />
       <Websitefooter/>
     </div>
   );
