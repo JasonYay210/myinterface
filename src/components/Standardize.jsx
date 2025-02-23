@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState, useEffect } from "react";
 
 const Standardize = () => {
@@ -78,7 +80,7 @@ const Standardize = () => {
     <div className="w-full border border-black rounded-[12px] max-w-[600px] mx-auto">
       {/* Header */}
       <div className="flex justify-between p-4 border-b border-black">
-        <p className="text-lg font-semibold">Standardize UI & UX</p>
+        <p className="text-lg font-semibold">Standardize UI/UX</p>
         <div className="flex gap-2">
           <p>o</p>
           <p>o</p>
@@ -89,7 +91,9 @@ const Standardize = () => {
       <div className="flex flex-col p-4 gap-4">
         {/* Scraped Data Container (Always visible, with no content until loaded) */}
         <div className="bg-black text-white rounded-lg p-4 h-[400px] overflow-y-auto overflow-x-auto hide-scrollbar">
-          {error ? (
+          {loading ? (
+            <p className="text-gray-400 animate-dots">Loading...</p> // Show animated dots while loading
+          ) : error ? (
             <p className="text-red-500">{error}</p> // Show error message if any
           ) : result ? (
             <pre className="whitespace-pre-wrap">{animatedResult}</pre> // Show animated result

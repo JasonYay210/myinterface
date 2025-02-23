@@ -91,7 +91,9 @@ const Hero = () => {
       <div className="flex flex-col p-4 gap-4">
         {/* Scraped Data Container (Always visible, with no content until loaded) */}
         <div className="bg-black text-white rounded-lg p-4 h-[400px] overflow-y-auto overflow-x-auto hide-scrollbar">
-          {error ? (
+          {loading ? (
+            <p className="text-gray-400 animate-dots">Loading...</p> // Show animated dots while loading
+          ) : error ? (
             <p className="text-red-500">{error}</p> // Show error message if any
           ) : result ? (
             <pre className="whitespace-pre-wrap">{animatedResult}</pre> // Show animated result
@@ -124,4 +126,3 @@ const Hero = () => {
 };
 
 export default Hero;
-
