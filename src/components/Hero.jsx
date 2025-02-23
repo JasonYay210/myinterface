@@ -1,70 +1,103 @@
-"use client"
-import React, { useState } from 'react';
-
-// import Logo from './Logo';
+"use client";
+import React, { useState, useEffect } from "react";
 
 const Hero = () => {
-  const [url, setUrl] = useState('');
-  const [result, setResult] = useState('');
+  const [url, setUrl] = useState("");
+  const [result, setResult] = useState("");
+  const [animatedResult, setAnimatedResult] = useState("");
   const [loading, setLoading] = useState(false);
+
+  // Reset the result and animatedResult when URL changes
+  useEffect(() => {
+    setResult(""); // Clear previous result
+    setAnimatedResult(""); // Clear animated result
+  }, [url]); // Dependency on url, resets whenever it changes
+
+  // To clear the animation interval whenever the component re-renders or resets
+  const clearAnimation = () => {
+    setAnimatedResult(""); // Clear the previous animation
+  };
 
   const handleScrape = async () => {
     try {
       setLoading(true);
-      const response = await fetch('/api/scrape', {
-        method: 'POST',
+      setResult(""); // Clear previous result before fetching new one
+      setAnimatedResult(""); // Clear previous animation
+
+      const response = await fetch("/api/scrape", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ url }),
       });
       const data = await response.json();
       setResult(data.result);
+
+      // Animate text after result is set
+      animateText(data.result);
     } catch (error) {
-      console.error('Scraping error:', error);
-      setResult('Error occurred while scraping');
+      console.error("Scraping error:", error);
+      setResult("Error occurred while scraping");
     } finally {
       setLoading(false);
     }
   };
 
+  // Animate the result letter by letter
+  const animateText = (text) => {
+    if (!text) return; // Return early if text is invalid (empty or undefined)
+
+    let index = -1;
+    const intervalId = setInterval(() => {
+      if (index < text.length-1) {
+        setAnimatedResult((prev) => prev + text[index]);
+        index++;
+      } else {
+        clearInterval(intervalId); // Stop when all text is shown
+      }
+    }, 10); // Adjust delay (in ms) to control speed of letter-by-letter animation
+  };
+
   return (
-    <div className="hero my-5 text-center" data-testid="hero">
-      <h1 className="mb-4" data-testid="hero-title">
-        MyInterface
-      </h1>
+    <div className="w-full border border-black rounded-[12px] max-w-[600px] mx-auto">
+      {/* Header */}
+      <div className="flex justify-between p-4 border-b border-black">
+        <p className="text-lg font-semibold">SEO Optimizer</p>
+        <div className="flex gap-2">
+          <p>o</p>
+          <p>o</p>
+        </div>
+      </div>
 
-      <p className="lead" data-testid="hero-lead">
-        An AI-driven tool ensures industry-standard UI/UX formatting and SEO, allowing you to focus on what truly matters - YOUR CONTENT.
-      </p>
-      <h1 className="mb-4" data-testid="hero-title">
-        Web Scraper with AI Analysis
-      </h1>
+      {/* Main Content */}
+      <div className="flex flex-col p-4 gap-4">
+        {/* Scraped Data Container (Always visible, with no content until loaded) */}
+        <div className="bg-black text-white rounded-lg p-4 h-[300px] overflow-y-auto overflow-x-auto hide-scrollbar">
+          {result ? (
+            <pre className="whitespace-pre-wrap">{animatedResult}</pre> // Show animated result
+          ) : (
+            <p className="text-gray-400 animate-dots">Awaiting link</p> // Placeholder with animation
+          )}
+        </div>
 
-      <div className="max-w-3xl mx-auto">
-        <input
-          type="text"
-          value={url}
-          onChange={(e) => setUrl(e.target.value)}
-          placeholder="Enter URL to scrape"
-          className="w-full p-3 mb-4 border rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-        <button
-          onClick={handleScrape}
-          disabled={loading}
-          className="px-6 py-3 bg-blue-500 text-black rounded-lg shadow-lg hover:bg-blue-600 disabled:opacity-50"
-        >
-          {loading ? 'Scraping...' : 'Scrape URL'}
-        </button>
-
-        {result && (
-          <div className="mt-8 p-8 bg-white rounded-lg shadow-lg border border-gray-200 overflow-auto max-h-[500px]">
-            <h3 className="text-xl font-semibold mb-4">Scraped Data Analysis</h3>
-            <div className="whitespace-pre-wrap text-sm text-gray-700">
-              <pre>{result}</pre>
-            </div>
-          </div>
-        )}
+        {/* URL Input and Button */}
+        <div className="flex items-center border border-black rounded-lg overflow-hidden">
+          <input
+            type="text"
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
+            placeholder="Enter URL to scrape"
+            className="flex-grow p-3 text-black"
+          />
+          <button
+            onClick={handleScrape}
+            disabled={loading}
+            className="w-12 h-12 bg-black text-white flex items-center justify-center"
+          >
+            {loading ? "..." : "+"}
+          </button>
+        </div>
       </div>
     </div>
   );

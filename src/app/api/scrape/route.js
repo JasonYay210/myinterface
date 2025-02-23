@@ -104,7 +104,7 @@ export async function POST(request) {
         {
           role: 'user',
           content: `
-            Analyze the following content based on industry standards for web development, including HTML structure, CSS practices, accessibility, and SEO:. Suggest standardized text and image sizes based on industry data and UX research. Make sure your output is between 5 to 10 words per category."
+            In the first line, rate the website on a scale of 1-100. just say rating: x/100. Second Line, generate Meta tags for the page basedAnalyze the following content based on industry standards for web development, including HTML structure, CSS practices, accessibility, and SEO:. Suggest standardized text and image sizes based on industry data and UX research. Make sure your output is between 5 to 10 words per category."
 
             Title: ${scrapedData.title}
             Meta Description: ${scrapedData.metaDescription}
