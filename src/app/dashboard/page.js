@@ -32,7 +32,7 @@ export default function DashboardPage() {
   }, [user]); // Runs whenever `user` changes
 
   const addButton = async () => {
-    const newButtonName = prompt("Enter the name for the new button:");
+    const newButtonName = prompt("New File Name");
     if (!newButtonName || !user) return;
   
     const userRef = doc(db, 'users', user.id);
@@ -98,24 +98,25 @@ export default function DashboardPage() {
   return (
     <div>
       <div className="flex h-[100vh]">
-        <div className="w-[30%] flex  flex-col border-r border-black p-[25px] gap-[15px]">
+        <div className="w-[25%] flex  flex-col border-r border-black p-[25px] gap-[15px]">
           <h1 className="font-space-mono font-normal text-[21px] leading-[31.1px] tracking-normal">Browse</h1>
           {buttons.map((button, index) => (
-            <div key={index} className="flex items-center justify-between">
-                <div 
-                onClick={() => handleButtonClick(button)}
-                className="flex flex-col text-black cursor-pointer"
+            <div key={index} className="cursor-pointer flex py-[10px] items-center justify-between border-b border-gray">
+                <div onClick={() => handleButtonClick(button)}
+                className="flex items-center gap-[10px] text-black w-full"
                 >
                 {button}
+                <p>(Local)</p>
+                <i className="fa-solid fa-arrow-right"></i>
                 </div>
                 <div
                 onClick={() => deleteButton(button)} // Ensure this is correctly set
-                className="bg-red-500 text-white px-3 py-1 rounded cursor-pointer"
                 >
-                -
+                             <i className="fas fa-trash"></i>
                 </div>
             </div>
             ))}
+            <p className="text-center">Cloud Storage Coming Soon</p>
           <div 
             onClick={addButton} 
             className="bg-black text-white px-9 py-4 rounded cursor-pointer flex items-center justify-center"
@@ -123,7 +124,7 @@ export default function DashboardPage() {
             +
           </div>
         </div>
-        <div className="p-[25px] gap-[25px] flex w-[70%]">
+        <div className="p-[25px] gap-[25px] flex w-[75%]">
           <Hero />
           <Standardize />
         </div>

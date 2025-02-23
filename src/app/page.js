@@ -58,7 +58,7 @@ export default function Home() {
           <p>Create Low-Fidelity Proof of Concept Wireframes in a matter of minutes. Optimize and standardize it with the click of a button.</p>
           <a className = "px-[20px] py-[10px] w-fit bg-white text-black rounded-[8px] border border-black" href = "#">Learn More</a>
         </div>
-        <img className = "w-[500px]" src = "SEO Optimizer.png"></img>
+        <img className = "w-[650px] border border-black rounded-[8px]" src = "myinterfaceformat.png"></img>
       </div>
       <Websitefooter/>
     </div>

@@ -118,7 +118,7 @@ const Hero = ({ onGeneratedElement, generatedElements }) => {
   };
 
   return (
-    <div className="bg-white fixed bottom-10 right-10 w-full max-w-[600px] h-fit mx-auto border border-black rounded-[12px] opacity-95">
+    <div className="bg-white fixed bottom-10 right-10 w-full max-w-[600px] mx-auto border border-black rounded-[12px] opacity-95">
       <div className="flex justify-between p-4 border-b border-black">
         <p className="text-lg font-semibold">Mockup Creator</p>
         <div className="flex gap-2">

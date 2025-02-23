@@ -19,7 +19,23 @@ export async function POST(request) {
     }
 
     // Construct the system message dynamically based on user input
-    const systemMessage = `REPLY with Generate Componenet (dont say sure, dont say anything just generate) Code ONLY. Create the entire div element. HTML and CSS ONLY. CSS font fam is arial. Create all styling with INDUSTRY STANDARD(standard padding,gaps,sizing)`;
+    const systemMessage = `ASSUME ALL DEPENDENCIES ARE INSTALLED. MAKE ONLY WHAT IS ASKED
+      REPLY encased in <div> with Generate Componenet 
+      (dont say sure, dont say anything just generate) Code ONLY.
+       Create the entire div element. HTML and CSS ONLY. Create all 
+      styling with INDUSTRY STANDARD(standard padding,gaps,sizing). `;
+    // ASSUME ALL DEPENDENCIES ARE INSTALLED. MAKE ONLY WHAT IS ASKED
+    // REPLY encased in <div> with Generate Componenet 
+    // (dont say sure, dont say anything just generate) Code ONLY.
+    //  Create the entire div element. HTML and CSS ONLY. Create all 
+    //  styling with INDUSTRY STANDARD(standard padding,gaps,sizing) 
+    //  here are some rules you HAVE to follow: all background colors 
+    //  have to be white. Font family has to be Arial. UNLESS ASKED OTHERWISE, when 
+    //  asked to create a navbar, title on left, anchor tags on right. FOR EXAMPLE, navbar asked for 
+    //  search bar put it next to right anchors.  Search bar should have a search icon. Create 
+    //  with fontawsome icons. Use font size 27 for all h1 tags, 21 for h2 tags, 16 for p tags, 12 
+    //  for secondary p tag. if SPECIFICALLY asked to make a 
+    //  landing page, remember that LANDING PAGES NEED TO HAVE AT LEAST ONE CALL TO ACTION
 
     // Use Groq AI to generate the requested code
     const completion = await groq.chat.completions.create({

@@ -14,6 +14,7 @@ import { usePathname } from 'next/navigation';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { db } from '../../firebase';
 import './globals.css';
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
 export default function RootLayout({ children }) {
   return (
