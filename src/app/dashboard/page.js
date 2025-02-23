@@ -1,6 +1,7 @@
 'use client'
 
 import Hero from "@/components/Hero";
+import Standardize from "@/components/Standardize";
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation'; // Import useRouter
 
@@ -47,7 +48,7 @@ export default function DashboardPage() {
         </div>
         <div className="p-[25px] gap-[25px] flex w-[70%]">
           <Hero />
-          <Hero />
+          <Standardize />
         </div>
       </div>
     </div>
