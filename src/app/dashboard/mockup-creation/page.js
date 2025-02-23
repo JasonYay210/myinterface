@@ -17,6 +17,7 @@ export default function MockupCreationPage() {
   const [generatedElements, setGeneratedElements] = useState([]); // Track generated elements
   const [showHero, setShowHero] = useState(true);
   const [retrievedValue, setRetrievedValue] = useState(''); // Store retrieved value
+  const [deletedElements, setDeletedElements] = useState([]); // Track deleted elements
 
   const refreshDb = async () => {
     if (user && buttonName) {
@@ -41,7 +42,6 @@ export default function MockupCreationPage() {
       console.log("Button updated successfully:", updatedButtons);
     }
   };
-  
 
   useEffect(() => {
     if (user && buttonName && generatedElements.length > 0) {
@@ -57,20 +57,35 @@ export default function MockupCreationPage() {
       }
     };
 
+    const handleUndo = (e) => {
+      if (e.ctrlKey && e.key === 'z') {
+        // If there are deleted elements, restore the last one
+        if (deletedElements.length > 0) {
+          const lastDeleted = deletedElements.pop();
+          setDeletedElements([...deletedElements]);
+          setGeneratedElements((prev) => [...prev, lastDeleted]);
+        }
+      }
+    };
+
     window.addEventListener('keydown', handleTabKey);
+    window.addEventListener('keydown', handleUndo);
 
     return () => {
       window.removeEventListener('keydown', handleTabKey);
+      window.removeEventListener('keydown', handleUndo);
     };
-  }, []);
+  }, [deletedElements]); // Add deletedElements as a dependency to track changes
 
   const handleGeneratedElement = (content) => {
     setGeneratedElements((prev) => [...prev, content]);
   };
 
   const deleteElement = (index) => {
-    const updatedElements = generatedElements.filter((_, i) => i !== index);
+    const updatedElements = [...generatedElements];
+    const deletedElement = updatedElements.splice(index, 1)[0]; // Remove element and capture it
     setGeneratedElements(updatedElements);
+    setDeletedElements((prev) => [...prev, deletedElement]); // Push the deleted element to the stack
   };
 
   useEffect(() => {
